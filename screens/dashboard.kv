@@ -1,0 +1,27 @@
+#:kivy 2.0
+MDScreen:
+    name: "dashboard"
+
+    MDBoxLayout:
+        spacing: 25
+        orientation: "horizontal"
+        size_hint: 0.5, 0.6
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        MDRaisedButton:
+            id: login
+            text: "Doctors"
+            font_size: 18
+            size_hint: 1, None
+            padding: 0, "16dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_release: 
+
+        MDRaisedButton:
+            id: login
+            text: "Readings"
+            font_size: 18
+            size_hint: 1, None
+            padding: 0, "16dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_release: 

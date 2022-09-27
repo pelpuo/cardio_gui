@@ -1,0 +1,239 @@
+#:kivy 2.0
+WindowManager:
+    LoginScreen:
+    DashboardScreen:
+
+<LoginScreen>:
+    name: "login"
+    MDBoxLayout:
+        spacing: 5
+        orientation: "vertical"
+        size_hint: 0.5, 0.6
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        MDLabel:
+            text: "Welcome"
+            halign: "center"
+            valign: "center"
+            font_size: 24
+
+        MDTextField:
+            id: username
+            mode: "rectangle"
+            hint_text: "username"
+            icon_left: "account"
+            font_size: 18
+
+        MDTextField:
+            id: password
+            mode: "rectangle"
+            hint_text: "password"
+            icon_left: "key-variant"
+            font_size: 18
+            password: True
+        
+        MDRaisedButton:
+            id: login
+            text: "Sign In"
+            font_size: 18
+            size_hint: 1, None
+            padding: 0, "16dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_release: 
+                root.some_function()
+                app.root.current = "dashboard"
+
+
+<DashboardScreen>:
+    name: "dashboard"
+
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Home"
+            left_action_items: [["arrow-left", lambda x: app.back('login')]]
+
+
+        MDBoxLayout:
+            spacing: 25
+            orientation: "horizontal"
+            size_hint: 0.5, 0.6
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            MDRaisedButton:
+                id: login
+                text: "Doctors"
+                font_size: 18
+                size_hint: 1, None
+                padding: 0, "16dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                on_release: 
+                    app.root.current = "doctors"
+
+            MDRaisedButton:
+                id: login
+                text: "Patients"
+                font_size: 18
+                size_hint: 1, None
+                padding: 0, "16dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                on_release: 
+                    app.root.current = "patients"
+
+<DoctorsScreen>:
+    name: "doctors"
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Doctors"
+            left_action_items: [["arrow-left", lambda x: app.back('dashboard')]]
+            
+        MDBottomNavigation:
+            MDBottomNavigationItem:
+                name: "verified_screen"
+                text: "Verified"
+                icon: "check-circle"
+
+                ScrollView:
+                    MDList:
+                        id: verifiedList
+
+            MDBottomNavigationItem:
+                name: "unverified_screen"
+                text: "Unverified"
+                icon: "minus-circle"
+
+                ScrollView:
+                    MDList:
+                        id: unverifiedList
+
+<PatientsScreen>:
+    name: "patients"
+
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Patients"
+            left_action_items: [["arrow-left", lambda x: app.back('dashboard')]]
+
+        ScrollView:
+            MDList:
+                id: patients
+
+    MDFloatingActionButton:
+        icon: 'plus-thick'
+        elevation_normal: 12
+        pos_hint: {'x': .85, 'y':.05}
+        on_release:
+            app.root.current = "new_patient"
+
+
+<PatientReadingsScreen>:
+    name: "patient_readings"
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Patient Readings"
+            left_action_items: [["arrow-left", lambda x: app.back('patients')]]
+
+        ScrollView:
+            MDList:
+                id: patient_readings
+
+    MDFloatingActionButton:
+        icon: 'plus-thick'
+        elevation_normal: 12
+        pos_hint: {'x': .85, 'y':.05}
+        on_release:
+            app.root.current = "new_reading"
+
+
+<NewReadingScreen>:
+    name: "new_reading"
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        MDTopAppBar:
+            title: "New Reading"
+            left_action_items: [["arrow-left", lambda x: app.back('patient_readings')]]
+
+
+<NewPatientScreen>:
+    name: "new_patient"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Add Patient"
+            left_action_items: [["arrow-left", lambda x: app.back('patients')]]
+
+        MDCard:
+            size: 500,500
+            orientation: "vertical"
+            size_hint: 0.5, 0.8
+            pos_hint: {"center_x": 0.5, "center_y": 0.3}
+            elevation:5
+            padding:5
+            spacing:5
+
+            MDTextField:
+                id: first_name
+                mode: "rectangle"
+                hint_text: "First Name"
+                icon_left: "account"
+                font_size: 16
+
+            MDTextField:
+                id: last_name
+                mode: "rectangle"
+                hint_text: "Last Name"
+                icon_left: "key-variant"
+                font_size: 16
+
+            MDTextField:
+                id: email_address
+                mode: "rectangle"
+                hint_text: "Email"
+                icon_left: "account"
+                font_size: 16
+
+            MDTextField:
+                id: date_of_birth
+                mode: "rectangle"
+                hint_text: "date of birth (dd/mm/yyyy)"
+                icon_left: "key-variant"
+                font_size: 16
+
+            MDTextField:
+                id: gender
+                mode: "rectangle"
+                hint_text: "gender"
+                icon_left: "account"
+                font_size: 16
+
+            MDTextField:
+                id: doctor
+                mode: "rectangle"
+                hint_text: "Doctor"
+                icon_left: "key-variant"
+                font_size: 16
+
+            MDRaisedButton:
+                id: login
+                text: "Add patient"
+                font_size: 16
+                size_hint: 1, None
+                padding: 0, "16dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                on_release: 
+                    root.some_function()
+                    app.root.current = "dashboard"
+                margin: 0, 0, 0, 50
+
+<EcgScreen>:
+    name: "ECG"

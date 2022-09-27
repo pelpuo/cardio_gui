@@ -1,0 +1,39 @@
+#:kivy 2.0
+<LoginScreen>:
+MDScreen:
+    name: "login"
+    MDBoxLayout:
+        spacing: 5
+        orientation: "vertical"
+        size_hint: 0.5, 0.6
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        MDLabel:
+            text: "Welcome"
+            halign: "center"
+            valign: "center"
+            font_size: 24
+
+        MDTextField:
+            id: username
+            mode: "rectangle"
+            hint_text: "username"
+            icon_left: "account"
+            font_size: 18
+
+        MDTextField:
+            id: password
+            mode: "rectangle"
+            hint_text: "password"
+            icon_left: "key-variant"
+            font_size: 18
+            password: True
+        
+        MDRaisedButton:
+            id: login
+            text: "Sign In"
+            font_size: 18
+            size_hint: 1, None
+            padding: 0, "16dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_release: 
