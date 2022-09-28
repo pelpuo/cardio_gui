@@ -166,7 +166,7 @@ WindowManager:
             orientation: "vertical"
             size_hint: 0.5, 0.6
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            
+
             MDTextField:
                 id: hospital_name
                 mode: "rectangle"
@@ -217,8 +217,8 @@ WindowManager:
                 padding: 0, "16dp"
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
                 on_release: 
-                    root.some_function()
-                    app.root.current = "dashboard"
+                    # root.some_function()
+                    app.root.current = "EcgReading"
                 margin: 0, 0, 50, 0
 
 
@@ -291,4 +291,30 @@ WindowManager:
                 margin: 0, 0, 0, 50
 
 <EcgScreen>:
-    name: "ECG"
+    name: "EcgReading"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "ECG Reading"
+            left_action_items: [["arrow-left", lambda x: app.back('patients')]]
+
+        BoxLayout:
+            orientation: "vertical"
+            BoxLayout:
+                size_hint: [1, .8]
+                Graph:
+                    id: graph
+                    xlabel: ""
+                    ylabel: "Level"
+            BoxLayout:
+                size_hint: [1, .2]
+                orientation: "horizontal"
+                Button:
+                    text: "START"
+                    bold: True
+                    on_press: root.start()
+                Button:
+                    text: "STOP"
+                    bold: True
+                    on_press: root.stop()

@@ -9,7 +9,35 @@ from screens.loginScreen import LoginScreen
 from screens.doctorScreen import DoctorsScreen
 from screens.patientsScreen import PatientsScreen
 from screens.patientReadingsScreen import PatientReadingsScreen
+from screens.ecgReadingScreen import EcgReadingScreen, Logic
 
+from threading import Thread
+import audioop
+import pyaudio
+
+def get_microphone_level():
+    """
+    `source: http://stackoverflow.com/questions/26478315/getting-volume-levels-from-pyaudio-for-use-in-arduino
+    audioop.max alternative to audioop.rms
+    """
+    chunk = 1024
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 1
+    RATE = 44100
+    p = pyaudio.PyAudio()
+
+    s = p.open(format=FORMAT,
+            channels=CHANNELS,
+            rate=RATE,
+            input=True,
+            frames_per_buffer=chunk)
+    global levels
+    while True:
+        data = s.read(chunk)
+        mx = audioop.rms(data, 2)
+        if len(levels) >= 100:
+            levels = []
+        levels.append(mx)
 
 class WindowManager(ScreenManager):
     pass
@@ -24,9 +52,6 @@ class NewReadingScreen(Screen):
 class NewPatientScreen(Screen):
     pass
 
-class EcgReadingScreen(Screen):
-    pass
-
 class EcgResultsScreen(Screen):
     pass
 
@@ -38,6 +63,14 @@ class myApp(MDApp):
 
         global screen_manager
         screen_manager = ScreenManager()
+
+        logic = Logic()
+        logic.levels = levels
+
+        # ecgReadingScreen = EcgReadingScreen(name="EcgReading")
+        # # ecgReadingScreen.levels = levels
+        # ecgReadingScreen.add_widget(Logic())
+        # screen_manager.add_widget(ecgReadingScreen)
         
         screen_manager.add_widget(LoginScreen(name="login"))
 
@@ -59,7 +92,9 @@ class myApp(MDApp):
         screen_manager.add_widget(NewReadingScreen(name="new_reading"))
         screen_manager.add_widget(NewPatientScreen(name="new_patient"))
 
-        screen_manager.add_widget(EcgReadingScreen(name="ECG"))
+        ecgReadingScreen = EcgReadingScreen(name="EcgReading")
+        ecgReadingScreen.levels = levels
+        screen_manager.add_widget(ecgReadingScreen)
 
         return screen_manager
 
@@ -71,4 +106,8 @@ class myApp(MDApp):
         
 
 if __name__ == "__main__":
+    levels = []  # store levels of microphone
+    get_level_thread = Thread(target = get_microphone_level)
+    get_level_thread.daemon = True
+    get_level_thread.start()
     myApp().run()
