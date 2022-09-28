@@ -40,7 +40,7 @@ WindowManager:
             padding: 0, "16dp"
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             on_release: 
-                root.some_function()
+                # if(root.login(root.ids.username.text, root.ids.password.text)): 
                 app.root.current = "dashboard"
 
 
@@ -155,12 +155,71 @@ WindowManager:
 <NewReadingScreen>:
     name: "new_reading"
 
-    BoxLayout:
+    MDBoxLayout:
         orientation: "vertical"
-        
+
         MDTopAppBar:
             title: "New Reading"
-            left_action_items: [["arrow-left", lambda x: app.back('patient_readings')]]
+            left_action_items: [["arrow-left", lambda x: app.back('patients')]]
+        
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint: 0.5, 0.6
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            
+            MDTextField:
+                id: hospital_name
+                mode: "rectangle"
+                hint_text: "Hospital Name"
+                icon_left: "account"
+                font_size: 16
+
+            MDTextField:
+                id: lead_type
+                mode: "rectangle"
+                hint_text: "Lead Type"
+                icon_left: "key-variant"
+                font_size: 16
+
+            MDTextField:
+                id: lead_placement
+                mode: "rectangle"
+                hint_text: "Lead Placement"
+                icon_left: "account"
+                font_size: 16
+
+            MDTextField:
+                id: speed
+                mode: "rectangle"
+                hint_text: "Speed"
+                icon_left: "key-variant"
+                font_size: 16
+
+            MDTextField:
+                id: limb
+                mode: "rectangle"
+                hint_text: "Limb"
+                icon_left: "account"
+                font_size: 16
+
+            MDTextField:
+                id: chest
+                mode: "rectangle"
+                hint_text: "Chest"
+                icon_left: "key-variant"
+                font_size: 16
+
+            MDRaisedButton:
+                id: login
+                text: "Start Reading"
+                font_size: 16
+                size_hint: 1, None
+                padding: 0, "16dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                on_release: 
+                    root.some_function()
+                    app.root.current = "dashboard"
+                margin: 0, 0, 50, 0
 
 
 <NewPatientScreen>:
@@ -172,14 +231,10 @@ WindowManager:
             title: "Add Patient"
             left_action_items: [["arrow-left", lambda x: app.back('patients')]]
 
-        MDCard:
-            size: 500,500
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: 0.5, 0.8
-            pos_hint: {"center_x": 0.5, "center_y": 0.3}
-            elevation:5
-            padding:5
-            spacing:5
+            size_hint: 0.5, 0.6
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
             MDTextField:
                 id: first_name
