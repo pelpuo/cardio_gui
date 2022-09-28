@@ -11,9 +11,26 @@ import audioop
 import pyaudio
 
 class EcgReadingScreen(Screen):
-    # pass
+    pass
+    # def __init__(self, **kwargs):
+    #     super(EcgReadingScreen, self).__init__(**kwargs)
+    #     self.plot = MeshLinePlot(color=[1, 0, 0, 1])
+    #     self.levels = []
+
+    # def start(self):
+    #     self.ids.graph.add_plot(self.plot)
+    #     Clock.schedule_interval(self.get_value, 0.001)
+
+    # def stop(self):
+    #     Clock.unschedule(self.get_value)
+
+    # def get_value(self, dt):
+    #     self.plot.points = [(i, j/5) for i, j in enumerate(self.levels)]
+
+
+class Logic(BoxLayout):
     def __init__(self, **kwargs):
-        super(EcgReadingScreen, self).__init__(**kwargs)
+        super(Logic, self).__init__(**kwargs)
         self.plot = MeshLinePlot(color=[1, 0, 0, 1])
         self.levels = []
 
@@ -26,20 +43,3 @@ class EcgReadingScreen(Screen):
 
     def get_value(self, dt):
         self.plot.points = [(i, j/5) for i, j in enumerate(self.levels)]
-
-
-# class Logic(BoxLayout):
-#     def __init__(self, **kwargs):
-#         super(Logic, self).__init__(**kwargs)
-#         self.plot = MeshLinePlot(color=[1, 0, 0, 1])
-#         self.levels = []
-
-#     def start(self):
-#         self.ids.graph.add_plot(self.plot)
-#         Clock.schedule_interval(self.get_value, 0.001)
-
-#     def stop(self):
-#         Clock.unschedule(self.get_value)
-
-#     def get_value(self, dt):
-#         self.plot.points = [(i, j/5) for i, j in enumerate(self.levels)]

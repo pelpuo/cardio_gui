@@ -218,7 +218,7 @@ WindowManager:
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
                 on_release: 
                     # root.some_function()
-                    app.root.current = "EcgReading"
+                    app.root.current = "ecg_reading"
                 margin: 0, 0, 50, 0
 
 
@@ -286,19 +286,18 @@ WindowManager:
                 padding: 0, "16dp"
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
                 on_release: 
-                    root.some_function()
                     app.root.current = "dashboard"
                 margin: 0, 0, 0, 50
 
-<EcgScreen>:
-    name: "EcgReading"
+<EcgReadingScreen>:
+    name: "ecg_reading"
     MDBoxLayout:
         orientation: "vertical"
 
         MDTopAppBar:
             title: "ECG Reading"
-            left_action_items: [["arrow-left", lambda x: app.back('patients')]]
-
+            left_action_items: [["arrow-left", lambda x: app.back('patient_readings')]]
+        
         BoxLayout:
             orientation: "vertical"
             BoxLayout:
@@ -318,3 +317,21 @@ WindowManager:
                     text: "STOP"
                     bold: True
                     on_press: root.stop()
+                Button:
+                    text: "END"
+                    bold: True
+                    on_press: root.end()
+
+
+<EcgResultsScreen>:
+    name: "ecg_results"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "ECG Results"
+            left_action_items: [["arrow-left", lambda x: app.back('patient_readings')]]
+
+        BoxLayout:
+            id: results
+            orientation: "vertical"

@@ -31,7 +31,7 @@ class PatientsScreen(Screen):
         for patient in patients:
             li = ThreeLineListItem(text=f"{patient.get('first_name')} {patient.get('last_name')}", secondary_text=f"email: {patient.get('email_address')} | birth: {patient.get('date_of_birth')}", tertiary_text= f"gender: {patient.get('gender')}")
             li.on_release = partial(self.to_patient_readings,patient.get('_id'))
-            self.ids.patients.add_widget(li)
+            self.ids.patients.add_widget(li) 
 
 
     def to_patient_readings(self, patient_id):

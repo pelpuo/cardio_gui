@@ -1,4 +1,5 @@
 import imp
+from unicodedata import name
 from kivymd.app import MDApp
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
@@ -9,11 +10,14 @@ from screens.loginScreen import LoginScreen
 from screens.doctorScreen import DoctorsScreen
 from screens.patientsScreen import PatientsScreen
 from screens.patientReadingsScreen import PatientReadingsScreen
-from screens.ecgReadingScreen import EcgReadingScreen, Logic
+from screens.ecgResultsScreen import EcgResultsScreen
 
 from threading import Thread
 import audioop
 import pyaudio
+from kivy.clock import Clock
+from kivy.uix.boxlayout import BoxLayout
+from kivy.garden.graph import MeshLinePlot
 
 def get_microphone_level():
     """
@@ -32,12 +36,15 @@ def get_microphone_level():
             input=True,
             frames_per_buffer=chunk)
     global levels
+    global reading_values
+    reading_values = []
     while True:
         data = s.read(chunk)
         mx = audioop.rms(data, 2)
         if len(levels) >= 100:
             levels = []
         levels.append(mx)
+        reading_values.append(mx)
 
 class WindowManager(ScreenManager):
     pass
@@ -52,8 +59,31 @@ class NewReadingScreen(Screen):
 class NewPatientScreen(Screen):
     pass
 
-class EcgResultsScreen(Screen):
-    pass
+
+class EcgReadingScreen(Screen):
+    def __init__(self, **kwargs):
+        super(EcgReadingScreen, self).__init__(**kwargs)
+        self.plot = MeshLinePlot(color=[1, 0, 0, 1])
+
+        self.app = None
+
+    def start(self):
+        self.ids.graph.add_plot(self.plot)
+        Clock.schedule_interval(self.get_value, 0.001)
+
+    def stop(self):
+        Clock.unschedule(self.get_value)
+
+
+    def get_value(self, dt):
+        self.plot.points = [(i, j/5) for i, j in enumerate(levels)]
+    
+    def end(self):
+        self.stop()
+        f = open("new_reading.txt", "w")
+        f.write(str(reading_values))
+        f.close()
+        self.app.root.current = "patient_readings"
 
 
 class myApp(MDApp):
@@ -63,14 +93,6 @@ class myApp(MDApp):
 
         global screen_manager
         screen_manager = ScreenManager()
-
-        logic = Logic()
-        logic.levels = levels
-
-        # ecgReadingScreen = EcgReadingScreen(name="EcgReading")
-        # # ecgReadingScreen.levels = levels
-        # ecgReadingScreen.add_widget(Logic())
-        # screen_manager.add_widget(ecgReadingScreen)
         
         screen_manager.add_widget(LoginScreen(name="login"))
 
@@ -92,9 +114,13 @@ class myApp(MDApp):
         screen_manager.add_widget(NewReadingScreen(name="new_reading"))
         screen_manager.add_widget(NewPatientScreen(name="new_patient"))
 
-        ecgReadingScreen = EcgReadingScreen(name="EcgReading")
-        ecgReadingScreen.levels = levels
-        screen_manager.add_widget(ecgReadingScreen)
+        ecgReading = EcgReadingScreen(name="ecg_reading")
+        ecgReading.app = self
+        screen_manager.add_widget(ecgReading)
+
+        ecgResults = EcgResultsScreen(name="ecg_results")
+        ecgResults.app = self
+        screen_manager.add_widget(ecgResults)
 
         return screen_manager
 

@@ -2,6 +2,7 @@ from kivy.uix.screenmanager import Screen
 import requests
 import json
 from kivymd.uix.list import ThreeLineListItem, TwoLineListItem
+from functools import partial
 
 class PatientReadingsScreen(Screen):
     def __init__(self, **kw):
@@ -34,4 +35,11 @@ class PatientReadingsScreen(Screen):
             secondary_text=f"Lead Type: {reading.get('lead_type')}  |  Lead Placement: {reading.get('lead_placement')}",
             tertiary_text = f"speed: {reading.get('speed')}  |  limb: {reading.get('limb')}  |  chest: {reading.get('chest')}")
 
+            li.on_release = partial(self.to_results,reading.get('_id'))
+
             self.ids.patient_readings.add_widget(li)
+
+    def to_results(self, reading_id):
+        selected_patient_file = open("selected_reading.txt", 'w')
+        selected_patient_file.write(reading_id)
+        self.app.root.current = "ecg_results"
