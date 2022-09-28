@@ -247,29 +247,48 @@ WindowManager:
                 id: last_name
                 mode: "rectangle"
                 hint_text: "Last Name"
-                icon_left: "key-variant"
+                icon_left: "account"
                 font_size: 16
 
             MDTextField:
                 id: email_address
                 mode: "rectangle"
                 hint_text: "Email"
-                icon_left: "account"
+                icon_left: "email"
                 font_size: 16
 
             MDTextField:
                 id: date_of_birth
                 mode: "rectangle"
                 hint_text: "date of birth (dd/mm/yyyy)"
-                icon_left: "key-variant"
+                icon_left: "calendar"
                 font_size: 16
 
-            MDTextField:
-                id: gender
-                mode: "rectangle"
-                hint_text: "gender"
-                icon_left: "account"
-                font_size: 16
+            # MDTextField:
+            #     id: gender
+            #     mode: "rectangle"
+            #     hint_text: "gender"
+            #     icon_left: "account"
+            #     font_size: 16
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: 0, 0, 0, 0
+
+                MDLabel:
+                    text: "Male"
+                    font_size: 14
+                CheckBox: 
+                    group: "gender"
+                    on_active: root.gender_clicked(self, self.active, "male")
+                
+                MDLabel:
+                    text: "Female"
+                    font_size: 14
+                CheckBox: 
+                    group: "gender"
+                    on_active: root.gender_clicked(self, self.active, "female")
+                
 
             MDTextField:
                 id: doctor

@@ -11,6 +11,8 @@ from screens.doctorScreen import DoctorsScreen
 from screens.patientsScreen import PatientsScreen
 from screens.patientReadingsScreen import PatientReadingsScreen
 from screens.ecgResultsScreen import EcgResultsScreen
+from screens.newPatientScreen import NewPatientScreen
+from screens.newReadingScreen import NewReadingScreen
 
 from threading import Thread
 import audioop
@@ -50,13 +52,6 @@ class WindowManager(ScreenManager):
     pass
  
 class DashboardScreen(Screen):
-    pass
-
-class NewReadingScreen(Screen):
-    pass
-
-
-class NewPatientScreen(Screen):
     pass
 
 
