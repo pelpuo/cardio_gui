@@ -271,6 +271,13 @@ WindowManager:
             #     icon_left: "account"
             #     font_size: 16
 
+            MDTextField:
+                id: doctor
+                mode: "rectangle"
+                hint_text: "Doctor"
+                icon_left: "key-variant"
+                font_size: 16
+            
             BoxLayout:
                 orientation: "horizontal"
                 padding: 0, 0, 0, 0
@@ -289,13 +296,6 @@ WindowManager:
                     group: "gender"
                     on_active: root.gender_clicked(self, self.active, "female")
                 
-
-            MDTextField:
-                id: doctor
-                mode: "rectangle"
-                hint_text: "Doctor"
-                icon_left: "key-variant"
-                font_size: 16
 
             MDRaisedButton:
                 id: login
