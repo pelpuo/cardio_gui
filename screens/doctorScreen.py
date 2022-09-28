@@ -17,6 +17,7 @@ class DoctorsScreen(Screen):
         baseUrl = "https://kjox2q.deta.dev/"
         f = open("cache/keyfile.txt", 'r')
         key = f.readlines()[0]
+        f.close()
 
         headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
 

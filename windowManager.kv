@@ -271,12 +271,23 @@ WindowManager:
             #     icon_left: "account"
             #     font_size: 16
 
-            MDTextField:
-                id: doctor
-                mode: "rectangle"
-                hint_text: "Doctor"
-                icon_left: "key-variant"
+            # MDTextField:
+            #     id: doctor
+            #     mode: "rectangle"
+            #     hint_text: "Doctor"
+            #     icon_left: "key-variant"
+            #     font_size: 16
+
+            MDRaisedButton:
+                id: doctor_name
+                text: "Doctor"
                 font_size: 16
+                size_hint: 1, None
+                padding: 0, "16dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                on_release: 
+                    root.load_dropdown()
+                margin: 0, 0, 0, 50
             
             BoxLayout:
                 orientation: "horizontal"
@@ -305,7 +316,8 @@ WindowManager:
                 padding: 0, "16dp"
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
                 on_release: 
-                    app.root.current = "dashboard"
+                    root.submit()
+                    # app.root.current = "dashboard"
                 margin: 0, 0, 0, 50
 
 <EcgReadingScreen>:

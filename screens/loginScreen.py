@@ -7,8 +7,7 @@ class LoginScreen(Screen):
 
     def login(self, email, password):
         baseUrl = "https://kjox2q.deta.dev/"
-        # data = {"username":email, "password":password}
-        data = {"username":"tech@example.com", "password":"password"}
+        data = {"username":email, "password":password}
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         res = requests.post(baseUrl + "login", data=data, headers=headers)
         res = res.json()
@@ -16,6 +15,7 @@ class LoginScreen(Screen):
         if(res.get("access_token")):
             f = open("cache/keyfile.txt", "w")
             f.write(res.get("access_token"))
+            f.close()
             return True
         else:
             return False
