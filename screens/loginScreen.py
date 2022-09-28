@@ -14,7 +14,7 @@ class LoginScreen(Screen):
         res = res.json()
         print(res.get("access_token"))
         if(res.get("access_token")):
-            f = open("keyfile.txt", "w")
+            f = open("cache/keyfile.txt", "w")
             f.write(res.get("access_token"))
             return True
         else:

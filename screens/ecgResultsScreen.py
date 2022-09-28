@@ -15,10 +15,10 @@ class EcgResultsScreen(Screen):
 
     def load_result(self):
         baseUrl = "https://kjox2q.deta.dev/"
-        f = open("keyfile.txt", 'r')
+        f = open("cache/keyfile.txt", 'r')
         key = f.readlines()[0]
 
-        f =  open('selected_reading.txt', 'r')
+        f =  open('cache/selected_reading.txt', 'r')
         reading_id = f.readlines()[0]
 
         headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
@@ -27,7 +27,7 @@ class EcgResultsScreen(Screen):
 
         ecg_results = res.json()
 
-        ecg_results_file = open("ecg_results.txt", 'w')
+        ecg_results_file = open("cache/ecg_results.txt", 'w')
         ecg_results_file.write(str(ecg_results))
 
         # Drawing of ECG Graph

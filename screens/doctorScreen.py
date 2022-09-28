@@ -15,7 +15,7 @@ class DoctorsScreen(Screen):
     
     def load_doctors(self):
         baseUrl = "https://kjox2q.deta.dev/"
-        f = open("keyfile.txt", 'r')
+        f = open("cache/keyfile.txt", 'r')
         key = f.readlines()[0]
 
         headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
@@ -24,7 +24,7 @@ class DoctorsScreen(Screen):
 
         doctors = res.json()
 
-        doctors_file = open("doctors.txt", 'w')
+        doctors_file = open("cache/doctors.txt", 'w')
         doctors_file.write(str(doctors))
 
         for doctor in doctors:

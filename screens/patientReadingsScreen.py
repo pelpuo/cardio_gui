@@ -15,10 +15,10 @@ class PatientReadingsScreen(Screen):
 
     def load_patient_readings(self):
         baseUrl = "https://kjox2q.deta.dev/"
-        f = open("keyfile.txt", 'r')
+        f = open("cache/keyfile.txt", 'r')
         key = f.readlines()[0]
 
-        f =  open('selected_patient.txt', 'r')
+        f =  open('cache/selected_patient.txt', 'r')
         patient_id = f.readlines()[0]
 
         headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
@@ -27,7 +27,7 @@ class PatientReadingsScreen(Screen):
 
         readings = res.json()
 
-        readings_file = open("readings.txt", 'w')
+        readings_file = open("cache/readings.txt", 'w')
         readings_file.write(str(readings))
 
         for reading in readings:
@@ -40,6 +40,6 @@ class PatientReadingsScreen(Screen):
             self.ids.patient_readings.add_widget(li)
 
     def to_results(self, reading_id):
-        selected_patient_file = open("selected_reading.txt", 'w')
+        selected_patient_file = open("cache/selected_reading.txt", 'w')
         selected_patient_file.write(reading_id)
         self.app.root.current = "ecg_results"

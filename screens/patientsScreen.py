@@ -16,7 +16,7 @@ class PatientsScreen(Screen):
     
     def load_patients(self):
         baseUrl = "https://kjox2q.deta.dev/"
-        f = open("keyfile.txt", 'r')
+        f = open("cache/keyfile.txt", 'r')
         key = f.readlines()[0]
 
         headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
@@ -25,7 +25,7 @@ class PatientsScreen(Screen):
 
         patients = res.json()
 
-        patients_file = open("patients.txt", 'w')
+        patients_file = open("cache/patients.txt", 'w')
         patients_file.write(str(patients))
 
         for patient in patients:
@@ -35,6 +35,6 @@ class PatientsScreen(Screen):
 
 
     def to_patient_readings(self, patient_id):
-        selected_patient_file = open("selected_patient.txt", 'w')
+        selected_patient_file = open("cache/selected_patient.txt", 'w')
         selected_patient_file.write(patient_id)
         self.app.root.current = "patient_readings"

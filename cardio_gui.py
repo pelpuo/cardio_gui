@@ -80,7 +80,7 @@ class EcgReadingScreen(Screen):
     
     def end(self):
         self.stop()
-        f = open("new_reading.txt", "w")
+        f = open("cache/new_reading.txt", "w")
         f.write(str(reading_values))
         f.close()
         self.app.root.current = "patient_readings"
