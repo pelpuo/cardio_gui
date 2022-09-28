@@ -106,7 +106,9 @@ class myApp(MDApp):
         patientReadingsScreen.app = self
         screen_manager.add_widget(patientReadingsScreen)
 
-        screen_manager.add_widget(NewReadingScreen(name="new_reading"))
+        new_reading = NewReadingScreen(name="new_reading")
+        new_reading.app = self
+        screen_manager.add_widget(new_reading)
 
         new_patients = NewPatientScreen(name="new_patient")
         new_patients.app = self

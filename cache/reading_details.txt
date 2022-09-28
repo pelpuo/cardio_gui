@@ -1,0 +1,1 @@
+{'hospital_name': 'Komfo Anokye Teaching Hospital', 'lead_type': '12 lead', 'lead_placement': 'standard', 'speed': '25', 'limb': '10', 'chest': '10'}
