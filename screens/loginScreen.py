@@ -5,6 +5,10 @@ class LoginScreen(Screen):
     # def __init__(self):
         # self.baseUrl = "https://kjox2q.deta.dev/"
 
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.app = None
+
     def login(self, email, password):
         baseUrl = "https://kjox2q.deta.dev/"
         data = {"username":email, "password":password}
@@ -16,9 +20,11 @@ class LoginScreen(Screen):
             f = open("cache/keyfile.txt", "w")
             f.write(res.get("access_token"))
             f.close()
-            return True
+            self.app.root.current = "dashboard"
         else:
             return False
+
+        
 
 # login = LoginScreen()
 # login.login("jjackson@example.com", "password")

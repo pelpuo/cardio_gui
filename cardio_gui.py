@@ -21,32 +21,53 @@ from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.garden.graph import MeshLinePlot
 
-def get_microphone_level():
-    """
-    `source: http://stackoverflow.com/questions/26478315/getting-volume-levels-from-pyaudio-for-use-in-arduino
-    audioop.max alternative to audioop.rms
-    """
-    chunk = 1024
-    FORMAT = pyaudio.paInt16
-    CHANNELS = 1
-    RATE = 44100
-    p = pyaudio.PyAudio()
+import serial
+import time
 
-    s = p.open(format=FORMAT,
-            channels=CHANNELS,
-            rate=RATE,
-            input=True,
-            frames_per_buffer=chunk)
+
+def get_ecg_readings():
+    arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)
     global levels
     global reading_values
     reading_values = []
     while True:
-        data = s.read(chunk)
-        mx = audioop.rms(data, 2)
-        if len(levels) >= 100:
-            levels = []
-        levels.append(mx)
-        reading_values.append(mx)
+        line = arduino.readline()   # read a byte
+        if line:
+            string = line.decode()  # convert the byte string to a unicode string
+            num = int(string) # convert the unicode string to an int
+            if len(levels) >= 100:
+                levels = []
+            if len(reading_values) >= 5000:
+                reading_values = []
+            levels.append(num)
+            reading_values.append(num)
+
+# def get_microphone_level():
+#     """
+#     `source: http://stackoverflow.com/questions/26478315/getting-volume-levels-from-pyaudio-for-use-in-arduino
+#     audioop.max alternative to audioop.rms
+#     """
+#     chunk = 1024
+#     FORMAT = pyaudio.paInt16
+#     CHANNELS = 1
+#     RATE = 44100
+#     p = pyaudio.PyAudio()
+
+#     s = p.open(format=FORMAT,
+#             channels=CHANNELS,
+#             rate=RATE,
+#             input=True,
+#             frames_per_buffer=chunk)
+#     global levels
+#     global reading_values
+#     reading_values = []
+#     while True:
+#         data = s.read(chunk)
+#         mx = audioop.rms(data, 2)
+#         if len(levels) >= 100:
+#             levels = []
+#         levels.append(mx)
+#         reading_values.append(mx)
 
 class WindowManager(ScreenManager):
     pass
@@ -75,6 +96,9 @@ class EcgReadingScreen(Screen):
     
     def end(self):
         self.stop()
+
+        # Format ecg data and add logic for predictions
+
         f = open("cache/new_reading.txt", "w")
         f.write(str(reading_values))
         f.close()
@@ -89,7 +113,9 @@ class myApp(MDApp):
         global screen_manager
         screen_manager = ScreenManager()
         
-        screen_manager.add_widget(LoginScreen(name="login"))
+        loginScreen = LoginScreen(name="login")
+        loginScreen.app = self
+        screen_manager.add_widget(loginScreen)
 
         dashboard = DashboardScreen(name="dashboard")
         screen_manager.add_widget(dashboard)
@@ -133,7 +159,8 @@ class myApp(MDApp):
 
 if __name__ == "__main__":
     levels = []  # store levels of microphone
-    get_level_thread = Thread(target = get_microphone_level)
+    # get_level_thread = Thread(target = get_microphone_level)
+    get_level_thread = Thread(target = get_ecg_readings)
     get_level_thread.daemon = True
     get_level_thread.start()
     myApp().run()
