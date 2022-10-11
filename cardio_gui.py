@@ -23,10 +23,49 @@ from kivy.garden.graph import MeshLinePlot
 
 import serial
 import time
+import requests
+import json
+import pandas as pd
+
+import time
+
+def get_ecg_readings_from_file():
+    global levels
+    global reading_values
+    reading_values = []
+
+    i = 0
+    sam = pd.read_csv("ecg_3.csv")
+    sam_vals = sam["0"]
+
+    sub = 0
+
+    while True:
+        if len(levels) >= 100:
+            levels = []
+
+        if len(reading_values) >= 5000:
+            reading_values.pop(0)
+
+        if sub == 4:
+            levels.append((sam_vals[i] + 1) * 100)  
+        reading_values.append(sam_vals[i])
+
+        i+=1
+        if i > 15000:
+            i = 0
+        
+        sub += 1
+        if sub > 4:
+            sub = 0
+
+        time.sleep(.001)
+
+        
 
 
 def get_ecg_readings():
-    arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)
+    arduino = serial.Serial(port='COM7', baudrate=9600, timeout=.1)
     global levels
     global reading_values
     reading_values = []
@@ -38,9 +77,54 @@ def get_ecg_readings():
             if len(levels) >= 100:
                 levels = []
             if len(reading_values) >= 5000:
-                reading_values = []
+                reading_values.pop(0)
             levels.append(num)
             reading_values.append(num)
+
+
+def post_ecg_readings():
+    baseUrl = "https://kjox2q.deta.dev/"
+
+    f = open("cache/keyfile.txt", 'r')
+    key = f.readlines()[0]
+    f.close()
+
+    f = open("cache/selected_patient.txt", 'r')
+    selected_patient = f.readlines()[0]
+    f.close()
+    
+    f = open("cache/reading_details.txt", 'r')
+    reading_details_txt = f.readlines()[0]
+    f.close()
+
+    reading_details_txt = reading_details_txt.replace("\'", "\"")
+
+    reading_details = json.loads(reading_details_txt)
+    reading_details["patient_id"] = selected_patient
+
+    reading_details["values"] = []
+    f = open("cache/new_reading.txt", 'r')
+    reading_vals = f.readlines()[0]
+    f.close()
+    reading_vals = reading_vals.replace("[", "").replace("]", "")
+    reading_vals = reading_vals.split(", ")
+    for sample in range(len(reading_vals)):
+        reading_details["values"].append({
+        "sample": sample,
+        "MLII": int(reading_vals[sample]),
+        "V5": 0
+    })
+
+    reading_details["predictions"] = "normal"
+    # Add logic for retrieving predictions
+
+    headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
+
+    res = requests.post(baseUrl + "reading/", headers=headers, json=reading_details)
+    res = res.json()
+    print(res)
+
+
 
 # def get_microphone_level():
 #     """
@@ -160,7 +244,7 @@ class myApp(MDApp):
 if __name__ == "__main__":
     levels = []  # store levels of microphone
     # get_level_thread = Thread(target = get_microphone_level)
-    get_level_thread = Thread(target = get_ecg_readings)
+    get_level_thread = Thread(target = get_ecg_readings_from_file)
     get_level_thread.daemon = True
     get_level_thread.start()
     myApp().run()

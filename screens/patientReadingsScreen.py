@@ -37,11 +37,11 @@ class PatientReadingsScreen(Screen):
             secondary_text=f"Lead Type: {reading.get('lead_type')}  |  Lead Placement: {reading.get('lead_placement')}",
             tertiary_text = f"speed: {reading.get('speed')}  |  limb: {reading.get('limb')}  |  chest: {reading.get('chest')}")
 
-            li.on_release = partial(self.to_results,reading.get('_id'))
+            li.on_release = partial(self.to_results,reading.get('_id'), reading.get('prediction'))
 
             self.ids.patient_readings.add_widget(li)
 
-    def to_results(self, reading_id):
+    def to_results(self, reading_id, prediction):
         selected_patient_file = open("cache/selected_reading.txt", 'w')
-        selected_patient_file.write(reading_id)
+        selected_patient_file.write(f"{reading_id} {prediction}")
         self.app.root.current = "ecg_results"

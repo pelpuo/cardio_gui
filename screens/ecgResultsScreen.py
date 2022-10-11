@@ -11,6 +11,7 @@ class EcgResultsScreen(Screen):
 
     def on_enter(self):
         # self.ids.ecg_results.clear_widgets()
+        self.ids.results.clear_widgets()
         self.load_result()
 
     def load_result(self):
@@ -20,7 +21,9 @@ class EcgResultsScreen(Screen):
         f.close()
 
         f =  open('cache/selected_reading.txt', 'r')
-        reading_id = f.readlines()[0]
+        data = f.readlines()[0].split(" ")
+        reading_id = data[0]
+        prediction = data[1]
         f.close()
 
         headers = {'Content-Type': 'application/json', 'Authorization':f'Bearer {key}'}
@@ -35,10 +38,14 @@ class EcgResultsScreen(Screen):
         # Drawing of ECG Graph
         signals = []
         for result in ecg_results.get("values"):
-            signals.append(result.get("'MLII'"))
+            signals.append(result.get("MLII"))
         
         signals = np.array(signals)
+
+        plt.clf()
         plt.plot(signals)
+
+        plt.title(f"Prediction: {prediction}")
           
         # setting x label
         plt.xlabel('Time(s)')
